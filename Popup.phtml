@@ -1,0 +1,10 @@
+<?php foreach($this->fields as $field): ?>
+<div class="amarkal-shortcode-field">
+    <div class="amarkal-shortcode-title">
+        <h2><?php echo $field['title'] ?></h2>
+    </div>
+    <div class="amarkal-shortcode-component">
+        <?php echo amarkal_ui_render($field['type'],$field); ?>
+    </div>
+</div>
+<?php endforeach; ?>
