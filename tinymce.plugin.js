@@ -55,23 +55,31 @@
             });
         });
 
+        // Replace shortcodes with placeholders
         _this.ed.on('BeforeSetContent', function (event) {
             event.content = _this.replaceShortcodes(event.content);
         });
 
+        // Restore shortcodes when switching to the text editor, or before saving
         _this.ed.on('PostProcess', function (event) {
             if (event.get) {
                 event.content = _this.restoreShortcodes(event.content);
             }
         });
 
+        // Add edit/delete button functionality
         _this.ed.on('click', function (event) {
             var $self = $(event.target),
                 $parent = $(event.target.parentElement);
 
+            // Make sure that a placeholder button was clicked
             if (event.target.nodeName === 'I' && $parent.hasClass('amarkal-shortcode-placeholder')) {
+                
+                // Delete this shortcode
                 if ($self.is(':first-child'))
                     $parent.remove();
+                
+                // Edit this shortcode
                 if ($self.is(':last-child')) {
                     var esc = $parent.attr('data-amarkal-shortcode'),
                         sc = wp.shortcode.next(_this.id, window.decodeURIComponent(esc)),
@@ -101,15 +109,29 @@
      * Popup functions. The `this` keyword referes to the Shortcode instance.
      */
     Shortcode.prototype.popup = {
+
+        /**
+         * Called when the popup is opened.
+         * 
+         * @param {array} values The list of values to use for the fields after the popup loads
+         */
         onOpen: function (values) {
             for (name in values) {
                 var $comp = $('#' + this.id + '.mce-window').find('[amarkal-component-name="' + name + '"]');
                 $comp.amarkalUIComponent().amarkalUIComponent('setValue', values[name]);
             }
         },
+
+        /**
+         * Called when the "Close" button is clicked
+         */
         onClose: function () {
             this.ed.windowManager.close();
         },
+
+        /**
+         * Called when the "Insert" button is clicked
+         */
         onInsert: function (e) {
             var values = {};
             $('#' + this.id + '.mce-window').find('.amarkal-ui-component').each(function () {
@@ -159,11 +181,13 @@
      */
     Shortcode.prototype.restoreShortcodes = function (content) {
 
+        // Parse a given HTML element to retrieve the value of a certain attribute
         function getAttr(str, name) {
             name = new RegExp(name + '=\"([^\"]+)\"').exec(str);
             return name ? window.decodeURIComponent(name[1]) : '';
         }
 
+        // Replace all placeholders into their corresponding shortcodes
         return content.replace(/(<div( [^>]+)?>)*<i><\/i><i><\/i>\.(?:<\/div>)*/g, function (match, div) {
             var data = getAttr(div, 'data-amarkal-shortcode');
 
@@ -175,6 +199,11 @@
         });
     }
 
+    /**
+     * Convert the given shortcode into its corresponding placeholder.
+     * 
+     * @param {wp.shortcode} sc The shortcode object
+     */
     Shortcode.prototype.html = function (sc) {
         var cls = this.config.placeholder_class ? ' ' + this.config.placeholder_class : '';
         return wp.html.string({
@@ -186,9 +215,6 @@
                 'data-title': this.config.title
             }
         });
-        // return '<div class="amarkal-shortcode-placeholder mceItem' + cls + '" data-amarkal-shortcode="' +
-        //     window.encodeURIComponent(sc.string()) +
-        //     '"><i></i><i></i>.</div>';
     }
 
 })(jQuery);
