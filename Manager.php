@@ -49,8 +49,13 @@ class Manager
         
         // This script must be included after the JSON object, since it refers
         // to it, and so the JSON must be readily available.
-        $plugins_array['amarkal_shortcode'] = \Amarkal\Core\Utility::path_to_url(__DIR__.'/tinymce.plugin.js');
+        $plugins_array['amarkal_shortcode'] = \Amarkal\Core\Utility::path_to_url(__DIR__.'/assets/js/dist/amarkal-shortcode.min.js');
         return $plugins_array;
+    }
+
+    public function enqueue_style()
+    {
+        \add_editor_style(\Amarkal\Core\Utility::path_to_url(__DIR__.'/assets/css/dist/amarkal-shortcode.min.css'));
     }
     
     /**
@@ -124,5 +129,6 @@ class Manager
     private function __construct() 
     {
         \add_filter('mce_external_plugins',array($this,'enqueue_script'));
+        \add_action('admin_init', array($this,'enqueue_style'));
     }
 }
