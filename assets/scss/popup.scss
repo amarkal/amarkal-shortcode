@@ -1,14 +1,16 @@
 @import 'variables';
-
-.mce-container-body {
     
-    .amarkal-settings-field {
+#amarkal-shortcode-popup { // Using an ID here to increase specificity to override TinyMCE CSS
+    height: 100%;
+    overflow-y: scroll;
+
+    .amarkal-shortcode-field {
         display: flex;
         align-items: center;
         background-color: white;
         border-top: 1px solid $border-color;
         
-        .amarkal-settings-title {
+        .amarkal-shortcode-title {
             flex: 0 0 200px;
             align-self: stretch;
             padding: 20px;
@@ -17,7 +19,7 @@
             
             h3 {
                 margin: 0;
-                font-size: 1.2em;
+                font-size: 1.1em;
                 display: flex;
                 align-items: center;
                 
@@ -41,30 +43,37 @@
                 margin-left: auto;
                 cursor: pointer;
                 
-                &:hover .help-content {
+                &:hover .help-wrapper {
                     visibility: visible;
                     opacity: 1;
                 }
             }
+
+            .help-wrapper {
+                position: absolute;
+                width: 300px;
+                visibility: hidden;
+                opacity: 0;
+                transform: translateX(-50%);
+                top: 50px;
+                left: 50%;
+                transition: all .2s ease-out;
+                z-index: 10;
+                text-align: center;
+                display: inline-block;
+                white-space: normal;
+            }
             
             .help-content {
-                position: absolute;
+                position: relative;
                 font-size: .9em;
                 line-height: 1.5em;
                 background-color: white;
                 box-shadow: 0 2px 25px rgba(0, 0, 0, 0.1), 0 2px 10px -3px rgba(0, 0, 0, 0.4);
                 padding: 15px;
-                top: 35px;
-                left: 50%;
-                transform: translateX(-50%);
                 border-radius: $border-radius;
-                width: 300px;
                 text-align: left;
                 font-weight: normal;
-                visibility: hidden;
-                opacity: 0;
-                transition: all .2s ease-out;
-                z-index: 10;
                 
                 &::before {
                     content: "";
@@ -96,12 +105,12 @@
             }
         }
         
-        .amarkal-settings-component {
+        .amarkal-shortcode-component {
             padding: 20px;
             flex: 1;
         }
         
-        .amarkal-settings-error {
+        .amarkal-shortcode-error {
             color: red;
             margin-top: 15px;
             position: relative;

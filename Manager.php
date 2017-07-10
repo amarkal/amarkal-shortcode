@@ -53,9 +53,14 @@ class Manager
         return $plugins_array;
     }
 
-    public function enqueue_style()
+    public function enqueue_popup_style()
     {
-        \add_editor_style(\Amarkal\Core\Utility::path_to_url(__DIR__.'/assets/css/dist/amarkal-shortcode.min.css'));
+        \wp_enqueue_style('amarkal-shortcode',\Amarkal\Core\Utility::path_to_url(__DIR__.'/assets/css/dist/amarkal-shortcode-popup.min.css'));
+    }
+
+    public function enqueue_editor_style()
+    {
+        \add_editor_style(\Amarkal\Core\Utility::path_to_url(__DIR__.'/assets/css/dist/amarkal-shortcode-editor.min.css'));
     }
     
     /**
@@ -129,6 +134,8 @@ class Manager
     private function __construct() 
     {
         \add_filter('mce_external_plugins',array($this,'enqueue_script'));
-        \add_action('admin_init', array($this,'enqueue_style'));
+        \add_action('admin_init', array($this,'enqueue_editor_style'));
+        \add_action('admin_enqueue_scripts', array($this,'enqueue_popup_style'));
+        \add_action('wp_enqueue_scripts', array($this,'enqueue_popup_style'));
     }
 }
