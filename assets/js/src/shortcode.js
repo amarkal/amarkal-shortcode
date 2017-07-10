@@ -60,14 +60,11 @@ Shortcode.prototype.init = function () {
 
             // Delete this shortcode
             if ($self.is(':first-child'))
-                $parent.remove();
+                _this.placeholder.delete.call(_this, $parent);
 
             // Edit this shortcode
             if ($self.is(':last-child')) {
-                var esc = $parent.attr('data-amarkal-shortcode'),
-                    sc = wp.shortcode.next(_this.id, window.decodeURIComponent(esc)),
-                    values = $.extend({}, sc.shortcode.attrs.named, { content: sc.shortcode.content });
-                _this.ed.execCommand(_this.config.cmd, values);
+                _this.placeholder.edit.call(_this, $parent);
             }
         }
     });
@@ -120,11 +117,35 @@ Shortcode.prototype.popup = {
         $('#' + this.id + '.mce-window').find('.amarkal-ui-component').each(function () {
             var value = $(this).amarkalUIComponent('getValue'),
                 name = $(this).attr('amarkal-component-name');
-            values[name] = value;
+            values[name] = value;console.log(name,value);
         });
 
         this.ed.selection.setContent(this.parseTemplate(this.config.template, values));
         this.ed.windowManager.close();
+    }
+};
+
+/**
+ * Placeholder button functions
+ */
+Shortcode.prototype.placeholder = {
+
+    /**
+     * 
+     */
+    edit: function($placeholder) {
+        var esc = $placeholder.attr('data-amarkal-shortcode'),
+            sc = wp.shortcode.next(this.id, window.decodeURIComponent(esc)),
+            values = $.extend({}, sc.shortcode.attrs.named, { content: sc.shortcode.content });
+        this.ed.execCommand(this.config.cmd, values);
+        this.ed.selection.select($placeholder[0]);
+    },
+
+    /**
+     * 
+     */
+    delete: function($placeholder) {
+        $placeholder.remove();
     }
 };
 
