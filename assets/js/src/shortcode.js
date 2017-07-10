@@ -195,7 +195,9 @@ Shortcode.prototype.html = function (sc) {
         attrs: {
             class: "amarkal-shortcode-placeholder mceItem" + cls,
             'data-amarkal-shortcode': window.encodeURIComponent(sc.string()),
-            'data-title': this.config.title
+            'data-title': this.config.title,
+            'data-vfv': this.config['placeholder_visible_field'] ? sc.attrs.named[this.config['placeholder_visible_field']] : '', // Visible field value
+            style: this.config['placeholder_icon'] ? 'background-image:url('+this.config['placeholder_icon']+')' : ''
         }
     });
 }

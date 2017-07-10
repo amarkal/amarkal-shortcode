@@ -4,14 +4,14 @@
             <div class="amarkal-shortcode-title">
                 <h3>
                     <?php echo $field['title'] ?>
-                    <?php if($field['help']): ?>
+                    <?php if(isset($field['help'])): ?>
                         <span class="help">?<span class="help-wrapper">
                                 <span class="help-content"><?php echo $field['help'] ?></span>
                             </span>
                         </span>
                     <?php endif; ?>
                 </h3>
-                <?php if($field['description']): ?>
+                <?php if(isset($field['description'])): ?>
                     <p class="description"><?php echo $field['description'] ?></p>
                 <?php endif; ?>
             </div>

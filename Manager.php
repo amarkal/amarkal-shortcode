@@ -93,7 +93,9 @@ class Manager
             'height'            => 450,
             'fields'            => array(),
             'show_placeholder'  => true,
-            'placeholder_class' => null
+            'placeholder_class' => null,
+            'placeholder_icon'  => null,
+            'placeholder_visible_field' => null
         );
     }
     

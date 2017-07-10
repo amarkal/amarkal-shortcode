@@ -1,13 +1,16 @@
 
 .amarkal-shortcode-placeholder {
     font-size: 0;
-    min-height: 50px;
+    height: 70px;
     margin: 10px 0;
     background-color: whitesmoke;
     border: 1px solid #e5e5e5;
     border-radius: 2px;
     cursor: default;
     position: relative;
+    background-repeat: no-repeat;
+    background-size: 50px;
+    background-position: 10px 10px;
 
     & > i {
         float: right;
@@ -66,5 +69,17 @@
         transform: translate(-50%, -50%);
         font-family: sans-serif;
         text-transform: uppercase;
+    }
+
+    &::before {
+        content: attr(data-vfv);
+        font-size: 14px;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: 4px;
+        color: gray;
+        text-align: center;
     }
 }
