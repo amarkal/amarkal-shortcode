@@ -15,4 +15,6 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 if(false !== (require_once 'functions.php'))
 {
     // Load required classes if not using composer
+    require_once 'Manager.php';
+    require_once 'Popup.php';
 }
