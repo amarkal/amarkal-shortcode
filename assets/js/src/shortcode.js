@@ -36,6 +36,11 @@ Shortcode.prototype.init = function () {
                 onclick: _this.popup.onClose.bind(_this)
             }]
         });
+
+        // Refresh the components after the window is opened
+        $('#'+_this.id+' .amarkal-ui-component').each(function(){
+            $(this).amarkalUIComponent('refresh');
+        });
     });
 
     // Replace shortcodes with placeholders
