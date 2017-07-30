@@ -96,7 +96,7 @@ class Manager
         $json = array();
         foreach($this->shortcodes as $id => $shortcode)
         {
-            $popup = new Popup($shortcode['fields']);
+            $popup = new Popup($shortcode);
             $json[$id] = $shortcode;
             $json[$id]['html'] = $popup->render();
         }
