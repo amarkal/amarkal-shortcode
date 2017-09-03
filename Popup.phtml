@@ -1,22 +1,22 @@
-<div id="amarkal-shortcode-popup" style="width:<?php echo $this->width -2; ?>px">
-    <?php foreach($this->fields as $field): ?>
+<div id="amarkal-shortcode-popup" style="width:<?php echo $this->config['width'] -2; ?>px">
+    <?php foreach($this->fields->get_all() as $field): ?>
         <div class="amarkal-shortcode-field">
             <div class="amarkal-shortcode-title">
                 <h3>
-                    <?php echo $field['title'] ?>
-                    <?php if(isset($field['help'])): ?>
+                    <?php echo $field->title ?>
+                    <?php if(isset($field->help)): ?>
                         <span class="help">?<span class="help-wrapper">
-                                <span class="help-content"><?php echo $field['help'] ?></span>
+                                <span class="help-content"><?php echo $field->help ?></span>
                             </span>
                         </span>
                     <?php endif; ?>
                 </h3>
-                <?php if(isset($field['description'])): ?>
-                    <p class="description"><?php echo $field['description'] ?></p>
+                <?php if(isset($field->description)): ?>
+                    <p class="description"><?php echo $field->description ?></p>
                 <?php endif; ?>
             </div>
             <div class="amarkal-shortcode-component">
-                <?php echo amarkal_ui_render($field['type'],$field); ?>
+                <?php echo $field->render(); ?>
             </div>
         </div>
     <?php endforeach; ?>

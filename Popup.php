@@ -19,20 +19,8 @@ class Popup
     public function __construct(array $config = array()) 
     {
         $this->config = $config;
-    }
-
-    /**
-     * Get a configuration argument by name
-     *
-     * @param string $name
-     * @return void
-     */
-    public function __get( $name )
-    {
-        if(isset($this->config[$name]))
-        {
-            return $this->config[$name];
-        }
+        $this->fields = new \Amarkal\UI\ComponentList($config['fields']);
+        $this->form   = new \Amarkal\UI\Form($this->fields);
     }
     
     /**
@@ -42,8 +30,9 @@ class Popup
      */
     public function render()
     {
+        $this->form->update();
         ob_start();
-        include 'Popup.phtml';
+        include dirname(__FILE__).'/Popup.phtml';
         return ob_get_clean();
     }
 }

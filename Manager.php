@@ -46,6 +46,15 @@ class Manager
         }
 
         $this->shortcodes[$args['id']] = $config;
+
+        if($config['is_shortcode'])
+        {
+            \add_shortcode( $args['id'], function($atts, $content = null) use ($args) {
+                // TODO: merge $atts with defaults using shortcode_atts()
+                $atts['content'] = $content;
+                call_user_func_array($args['render'], array($atts));
+            });
+        }
     }
     
     /**
@@ -115,11 +124,13 @@ class Manager
             'cmd'               => '',
             'width'             => 550,
             'height'            => 450,
+            'render'            => function(){},
             'fields'            => array(),
+            'is_shortcode'      => true,
             'show_placeholder'  => true,
             'placeholder_class' => null,
             'placeholder_icon'  => null,
-            'placeholder_visible_field' => null
+            'placeholder_subtitle' => null
         );
     }
     
