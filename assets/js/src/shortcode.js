@@ -17,8 +17,11 @@ function Shortcode(id, config, ed) {
 Shortcode.prototype.init = function () {
     var _this = this;
 
+    // Add a command to the active editor
     this.ed.addCommand(this.config.cmd, function (values) {
         if (typeof values === 'undefined') values = _this.getDefaultValues();
+        
+        // Open a popup to edit this shortcode
         _this.ed.windowManager.open({
             title: _this.config.title,
             onOpen: _this.popup.onOpen.bind(_this, values),
@@ -102,8 +105,9 @@ Shortcode.prototype.popup = {
      */
     onOpen: function (values) {
         for (name in values) {
-            var $comp = $('#' + this.id + '.mce-window').find('[amarkal-component-name="' + name + '"]');
-            $comp.amarkalUIComponent().amarkalUIComponent('setValue', values[name]);
+            var $comp = $('#' + this.id + '.mce-window').find('[amarkal-component-name="' + name + '"]'),
+                value = values[name];
+            $comp.amarkalUIComponent().amarkalUIComponent('setValue', value);
         }
     },
 
@@ -118,11 +122,12 @@ Shortcode.prototype.popup = {
      * Called when the "Insert" button is clicked
      */
     onInsert: function (e) {
-        var values = {};
+        var values = {},
+            encode = this.placeholder.encodeValue;
         $('#' + this.id + '.mce-window').find('.amarkal-ui-component').each(function () {
             var value = $(this).amarkalUIComponent('getValue'),
                 name = $(this).attr('amarkal-component-name');
-            values[name] = value;console.log(name,value);
+            values[name] = encode(value);
         });
 
         this.ed.selection.setContent(this.parseTemplate(this.config.template, values));
@@ -136,21 +141,49 @@ Shortcode.prototype.popup = {
 Shortcode.prototype.placeholder = {
 
     /**
-     * 
+     * Let the user edit the shortcode corresponding to the given placeholder by
+     * opening the shortcode editor popup
      */
     edit: function($placeholder) {
         var esc = $placeholder.attr('data-amarkal-shortcode'),
             sc = wp.shortcode.next(this.id, window.decodeURIComponent(esc)),
             values = $.extend({}, sc.shortcode.attrs.named, { content: sc.shortcode.content });
-        this.ed.execCommand(this.config.cmd, values);
+
+        this.ed.execCommand(this.config.cmd, this.placeholder.decodeValues(values));
         this.ed.selection.select($placeholder[0]);
     },
 
     /**
-     * 
+     * Delete the shortcode corresponding to the given placeholder
      */
     delete: function($placeholder) {
         $placeholder.remove();
+    },
+
+    decodeValue: function(value) {
+        return JSON.parse(decodeURIComponent(value));
+    },
+
+    decodeValues: function(values) {
+        var decode = this.decodeValue,
+            decodedValues = {};
+        Object.keys(values).forEach(function(name){
+            decodedValues[name] = decode(values[name]);
+        });
+        return decodedValues;
+    },
+
+    encodeValue: function(value) {
+        return encodeURIComponent(JSON.stringify(value));
+    },
+
+    encodeValues: function(values) {
+        var encode = this.encodeValue,
+            encodedValues = {};
+        Object.keys(values).forEach(function(name){
+            encodedValues[name] = encode(values[name]);
+        });
+        return encodedValues;
     }
 };
 
@@ -178,7 +211,9 @@ Shortcode.prototype.parseTemplate = function (template, values) {
  */
 Shortcode.prototype.replaceShortcodes = function (content) {
     var _this = this;
-    return wp.shortcode.replace('my-alert', content, function (sc) { return _this.html(sc); });
+    return wp.shortcode.replace(this.id, content, function (sc) { 
+        return _this.html(sc); 
+    });
 }
 
 /**
@@ -222,7 +257,7 @@ Shortcode.prototype.html = function (sc) {
             class: "amarkal-shortcode-placeholder mceItem" + cls,
             'data-amarkal-shortcode': window.encodeURIComponent(sc.string()),
             'data-title': this.config.title,
-            'data-subtitle': this.config['placeholder_subtitle'] ? this.parseTemplate(this.config['placeholder_subtitle'],sc.attrs.named) : '', // Visible field value
+            'data-subtitle': this.config['placeholder_subtitle'] ? this.parseTemplate(this.config['placeholder_subtitle'],this.placeholder.decodeValues(sc.attrs.named)) : '', // Visible field value
             style: this.config['placeholder_icon'] ? 'background-image:url('+this.config['placeholder_icon']+')' : ''
         }
     });

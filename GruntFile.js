@@ -47,8 +47,6 @@ module.exports = function(grunt) {
                     '<%= dirs.css %>/dist/amarkal-shortcode-editor.min.css': ['<%= dirs.css %>/src/editor.css'],
                     '<%= dirs.css %>/dist/amarkal-shortcode-popup.min.css': ['<%= dirs.css %>/src/popup.css']
                 }
-                // src: ['<%= dirs.css %>/src/*.css'],
-                // dest: '<%= dirs.css %>/dist/amarkal-shortcode.min.css'
             },
             js: {
                 options: {
