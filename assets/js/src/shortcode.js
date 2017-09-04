@@ -9,6 +9,8 @@ function Shortcode(id, config, ed) {
     this.id = id;
     this.config = config;
     this.ed = ed;
+    this.popup = new Popup(this);
+    this.placeholder = new Placeholder(this);
 }
 
 /**
@@ -24,7 +26,7 @@ Shortcode.prototype.init = function () {
         // Open a popup to edit this shortcode
         _this.ed.windowManager.open({
             title: _this.config.title,
-            onOpen: _this.popup.onOpen.bind(_this, values),
+            onOpen: _this.popup.onOpen.bind(_this.popup, values),
             width: _this.config.width,
             height: _this.config.height,
             id: _this.id,
@@ -33,10 +35,10 @@ Shortcode.prototype.init = function () {
                 text: 'Insert',
                 classes: 'widget btn primary first abs-layout-item',
                 disabled: false,
-                onclick: _this.popup.onInsert.bind(_this)
+                onclick: _this.popup.onInsert.bind(_this.popup)
             }, {
                 text: 'Close',
-                onclick: _this.popup.onClose.bind(_this)
+                onclick: _this.popup.onClose.bind(_this.popup)
             }]
         });
 
@@ -68,11 +70,11 @@ Shortcode.prototype.init = function () {
 
             // Delete this shortcode
             if ($self.is(':first-child'))
-                _this.placeholder.delete.call(_this, $parent);
+                _this.placeholder.delete.call(_this.placeholder, $parent);
 
             // Edit this shortcode
             if ($self.is(':last-child')) {
-                _this.placeholder.edit.call(_this, $parent);
+                _this.placeholder.edit.call(_this.placeholder, $parent);
             }
         }
     });
@@ -91,100 +93,6 @@ Shortcode.prototype.getDefaultValues = function () {
         }
     }
     return defaults;
-};
-
-/**
- * Popup functions. The `this` keyword referes to the Shortcode instance.
- */
-Shortcode.prototype.popup = {
-
-    /**
-     * Called when the popup is opened.
-     * 
-     * @param {array} values The list of values to use for the fields after the popup loads
-     */
-    onOpen: function (values) {
-        for (name in values) {
-            var $comp = $('#' + this.id + '.mce-window').find('[amarkal-component-name="' + name + '"]'),
-                value = values[name];
-            $comp.amarkalUIComponent().amarkalUIComponent('setValue', value);
-        }
-    },
-
-    /**
-     * Called when the "Close" button is clicked
-     */
-    onClose: function () {
-        this.ed.windowManager.close();
-    },
-
-    /**
-     * Called when the "Insert" button is clicked
-     */
-    onInsert: function (e) {
-        var values = {},
-            encode = this.placeholder.encodeValue;
-        $('#' + this.id + '.mce-window').find('.amarkal-ui-component').each(function () {
-            var value = $(this).amarkalUIComponent('getValue'),
-                name = $(this).attr('amarkal-component-name');
-            values[name] = encode(value);
-        });
-
-        this.ed.selection.setContent(this.parseTemplate(this.config.template, values));
-        this.ed.windowManager.close();
-    }
-};
-
-/**
- * Placeholder button functions
- */
-Shortcode.prototype.placeholder = {
-
-    /**
-     * Let the user edit the shortcode corresponding to the given placeholder by
-     * opening the shortcode editor popup
-     */
-    edit: function($placeholder) {
-        var esc = $placeholder.attr('data-amarkal-shortcode'),
-            sc = wp.shortcode.next(this.id, window.decodeURIComponent(esc)),
-            values = $.extend({}, sc.shortcode.attrs.named, { content: sc.shortcode.content });
-
-        this.ed.execCommand(this.config.cmd, this.placeholder.decodeValues(values));
-        this.ed.selection.select($placeholder[0]);
-    },
-
-    /**
-     * Delete the shortcode corresponding to the given placeholder
-     */
-    delete: function($placeholder) {
-        $placeholder.remove();
-    },
-
-    decodeValue: function(value) {
-        return JSON.parse(decodeURIComponent(value));
-    },
-
-    decodeValues: function(values) {
-        var decode = this.decodeValue,
-            decodedValues = {};
-        Object.keys(values).forEach(function(name){
-            decodedValues[name] = decode(values[name]);
-        });
-        return decodedValues;
-    },
-
-    encodeValue: function(value) {
-        return encodeURIComponent(JSON.stringify(value));
-    },
-
-    encodeValues: function(values) {
-        var encode = this.encodeValue,
-            encodedValues = {};
-        Object.keys(values).forEach(function(name){
-            encodedValues[name] = encode(values[name]);
-        });
-        return encodedValues;
-    }
 };
 
 /**

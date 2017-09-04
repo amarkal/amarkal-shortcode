@@ -55,8 +55,10 @@ module.exports = function(grunt) {
                     separator: "\n"
                 },
                 src: [
+                    '<%= dirs.js %>/src/popup.js',
+                    '<%= dirs.js %>/src/placeholder.js',
                     '<%= dirs.js %>/src/shortcode.js',
-                    '<%= dirs.js %>/src/plugin.js'
+                    '<%= dirs.js %>/src/tinymce.plugin.js'
                 ],
                 dest: '<%= dirs.js %>/dist/amarkal-shortcode.min.js'
             }
