@@ -30,12 +30,19 @@ Popup.prototype.onClose = function () {
  */
 Popup.prototype.onInsert = function () {
     var values = {},
-        encode = this.shortcode.placeholder.encodeValue;
+        encode = this.shortcode.placeholder.encodeValue,
+        $node  = $(this.shortcode.ed.selection.getNode());
+
     $('#' + this.shortcode.id + '.mce-window').find('.amarkal-ui-component').each(function () {
         var value = $(this).amarkalUIComponent('getValue'),
             name = $(this).attr('amarkal-component-name');
         values[name] = encode(value);
     });
+    
+    // Remove he previous amarkal shortcode if it was selected
+    if($node.attr('data-amarkal-shortcode') !== undefined) {
+        $node.remove();
+    }
 
     this.shortcode.ed.selection.setContent(this.shortcode.parseTemplate(this.shortcode.config.template, values));
     this.shortcode.ed.windowManager.close();

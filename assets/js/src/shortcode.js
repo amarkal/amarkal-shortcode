@@ -63,10 +63,13 @@ Shortcode.prototype.init = function () {
     // Add edit/delete button functionality
     _this.ed.on('click', function (event) {
         var $self = $(event.target),
-            $parent = $(event.target.parentElement);
+            $parent = $(event.target.parentElement),
+            shortcode = decodeURIComponent($parent.attr('data-amarkal-shortcode'));
 
         // Make sure that a placeholder button was clicked
-        if (event.target.nodeName === 'I' && $parent.hasClass('amarkal-shortcode-placeholder')) {
+        if (event.target.nodeName === 'I' 
+            && $parent.hasClass('amarkal-shortcode-placeholder')
+            && wp.shortcode.next(_this.id, shortcode)) { // Verify that the shortcode has the correct tag
 
             // Delete this shortcode
             if ($self.is(':first-child'))

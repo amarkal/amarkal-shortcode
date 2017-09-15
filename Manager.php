@@ -52,7 +52,7 @@ class Manager
             \add_shortcode( $args['id'], function($atts, $content = null) use ($args) {
                 // TODO: merge $atts with defaults using shortcode_atts()
                 $atts['content'] = $content;
-                call_user_func_array($args['render'], array($atts));
+                return call_user_func_array($args['render'], array($this->decode_atts($atts)));
             });
         }
     }
@@ -94,6 +94,18 @@ class Manager
     public function enqueue_editor_style()
     {
         \add_editor_style(\Amarkal\Core\Utility::path_to_url(__DIR__.'/assets/css/dist/amarkal-shortcode-editor.min.css'));
+    }
+
+    private function decode_atts($atts)
+    {
+        $decoded_atts = array();
+        
+        // Attributes are JSON encoded and then URL encoded in the shortcode editor, so
+        // we need to reverse that
+        foreach($atts as $name => $value) {
+            $decoded_atts[$name] = \json_decode(\urldecode($value));
+        }
+        return $decoded_atts;
     }
     
     /**
