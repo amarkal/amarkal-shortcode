@@ -29,17 +29,33 @@ Placeholder.prototype.delete = function($placeholder) {
  * Decode a placeholder attribute
  */
 Placeholder.prototype.decodeValue = function(value) {
-    return JSON.parse(decodeURIComponent(value));
+    // Attempt to decode a value. If an error occurs, return the undecoded attribute value.
+    // This solves backward compatibility issues, where attributes are not JSON encoded.
+    try {
+        return JSON.parse(decodeURIComponent(value));
+    }
+    // This part will only be reached if the value is not JSON encoded
+    catch(err) {
+        return this.decodeNonJSONEncodedValue(value);
+    }
 };
+
+Placeholder.prototype.decodeNonJSONEncodedValue = function(value) {
+    // Non encoded arrays are stored as a string of comma delimited tokens
+    if(-1 !== value.indexOf(',')) {
+        return value.split(',');
+    }
+    return value;
+}
 
 /**
  * Decode an array of placeholder attributes
  */
 Placeholder.prototype.decodeValues = function(values) {
-    var decode = this.decodeValue,
+    var _this = this,
         decodedValues = {};
     Object.keys(values).forEach(function(name){
-        decodedValues[name] = decode(values[name]);
+        decodedValues[name] = _this.decodeValue(values[name]);
     });
     return decodedValues;
 };
@@ -55,10 +71,10 @@ Placeholder.prototype.encodeValue = function(value) {
  * Encode an array of placeholder attributes
  */
 Placeholder.prototype.encodeValues = function(values) {
-    var encode = this.encodeValue,
+    var _this = this,
         encodedValues = {};
     Object.keys(values).forEach(function(name){
-        encodedValues[name] = encode(values[name]);
+        encodedValues[name] = this.encodeValue(values[name]);
     });
     return encodedValues;
 };
