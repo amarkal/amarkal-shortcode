@@ -49,10 +49,11 @@ class Manager
 
         if($config['is_shortcode'])
         {
-            \add_shortcode( $args['id'], function($atts, $content = null) use ($args) {
+            $self = $this; // Needed for backward compatibility
+            \add_shortcode( $args['id'], function($atts, $content = null) use ($args, $self) {
                 // TODO: merge $atts with defaults using shortcode_atts()
                 $atts['content'] = $content;
-                return call_user_func_array($args['render'], array($this->decode_atts($atts)));
+                return call_user_func_array($args['render'], array($self->decode_atts($atts)));
             });
         }
     }
@@ -96,7 +97,7 @@ class Manager
         \add_editor_style(\Amarkal\Core\Utility::path_to_url(__DIR__.'/assets/css/dist/amarkal-shortcode-editor.min.css'));
     }
 
-    private function decode_atts($atts)
+    public function decode_atts($atts)
     {
         $decoded_atts = array();
         
