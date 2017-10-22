@@ -102,10 +102,32 @@ class Manager
         
         // Attributes are JSON encoded and then URL encoded in the shortcode editor, so
         // we need to reverse that
-        foreach($atts as $name => $value) {
-            $decoded_atts[$name] = \json_decode(\urldecode($value));
+        foreach($atts as $name => $value)
+        {
+            $decoded_atts[$name] = $this->decode_att($value);
         }
         return $decoded_atts;
+    }
+
+    private function decode_att($value)
+    {
+        $decoded = \json_decode(\urldecode($value));
+        
+        // If the value is null, it is most likely because the attribute is not JSON encoded.
+        // We return the uncoded value for backward compatibility, where attributes are not JSON encoded.
+        if(null === $decoded) {
+            $decoded = $this->decode_non_json_encodede_att($value);
+        }
+
+        return $decoded;
+    }
+
+    private function decode_non_json_encodede_att($value)
+    {
+        if(false !== \strpos($value, ',')) {
+            return \explode(',', $value);
+        }
+        return $value;
     }
     
     /**
