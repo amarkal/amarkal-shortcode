@@ -4,17 +4,17 @@
   "author": "Askupa Software",
   "main": "GruntFile.js",
   "license": "GPL-3.0",
-  "repository": { 
-    "type" : "git",
-    "url" : "https://github.com/askupasoftware/amarkal-shortcode.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/askupasoftware/amarkal-shortcode.git"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-contrib-compass": "^1.1.1",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-jshint": "~1.1.0",
-    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-uglify": "^3.2.1",
     "grunt-contrib-watch": "^1.0.0",
-    "matchdep": "^1.0.1"
+    "matchdep": "^2.0.0"
   }
 }

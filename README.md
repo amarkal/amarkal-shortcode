@@ -6,5 +6,5 @@ A shortcode engine that integrates into WordPress' WYSIWYG editor.
 
 ## overview
 
-**amarkal-shortcode** Is a shortcode engine that lets you add shortcodes to WordPress with a user interface based on [amarkal-ui](https://github.com/askupasoftware/amarkal-ui).
+**amarkal-shortcode** Is a shortcode engine that lets you add shortcodes to WordPress with a [amarkal-ui](https://github.com/askupasoftware/amarkal-ui) based user interface.
 

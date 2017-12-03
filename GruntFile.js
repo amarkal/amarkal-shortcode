@@ -18,7 +18,7 @@ module.exports = function(grunt) {
             },
             js: {
                 files: ['<%= dirs.js %>/src/*.js'],
-                tasks: ['concat:js','uglify']
+                tasks: ['uglify']
             },
             scss: {
                 files: [
@@ -47,29 +47,21 @@ module.exports = function(grunt) {
                     '<%= dirs.css %>/dist/amarkal-shortcode-editor.min.css': ['<%= dirs.css %>/src/editor.css'],
                     '<%= dirs.css %>/dist/amarkal-shortcode-popup.min.css': ['<%= dirs.css %>/src/popup.css']
                 }
-            },
-            js: {
-                options: {
-                    banner: '(function($,global){',
-                    footer: '})(jQuery, window);',
-                    separator: "\n"
-                },
-                src: [
-                    '<%= dirs.js %>/src/popup.js',
-                    '<%= dirs.js %>/src/placeholder.js',
-                    '<%= dirs.js %>/src/shortcode.js',
-                    '<%= dirs.js %>/src/tinymce.plugin.js'
-                ],
-                dest: '<%= dirs.js %>/dist/amarkal-shortcode.min.js'
             }
         },
         uglify: {
             main: {
                 options: {
-                    banner: ''
+                    sourceMap: true,
+                    wrap: 'Amarkal'
                 },
                 files: {
-                    '<%= dirs.js %>/dist/amarkal-shortcode.min.js': ['<%= dirs.js %>/dist/amarkal-shortcode.min.js']
+                    '<%= dirs.js %>/dist/amarkal-shortcode.min.js': [
+                        '<%= dirs.js %>/src/popup.js',
+                        '<%= dirs.js %>/src/placeholder.js',
+                        '<%= dirs.js %>/src/shortcode.js',
+                        '<%= dirs.js %>/src/core.js'
+                    ]
                 }
             }
         }
