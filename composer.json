@@ -3,7 +3,7 @@
     "description": "A shortcode engine that integrates into WordPress' WYSIWYG editor",
     "type": "wordpress",
     "keywords": ["wordpress","admin","ui","form","user interface","shortcode"],
-    "homepage": "https://github.com/askupasoftware/amarkal-shortcode",
+    "homepage": "https://github.com/amarkal/amarkal-shortcode",
     "license": "GPL-3.0",
     "authors": [
         {
@@ -12,8 +12,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/askupasoftware/amarkal-shortcode/issues",
-        "source": "https://github.com/askupasoftware/amarkal-shortcode"
+        "issues": "https://github.com/amarkal/amarkal-shortcode/issues",
+        "source": "https://github.com/amarkal/amarkal-shortcode"
     },
     "require": {
         "php": ">=5.3.0",

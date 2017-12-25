@@ -7,7 +7,7 @@
  *
  * @package   amarkal-shortcode
  * @author    Askupa Software <hello@askupasoftware.com>
- * @link      https://github.com/askupasoftware/amarkal-shortcode
+ * @link      https://github.com/amarkal/amarkal-shortcode
  * @copyright 2017 Askupa Software
  */
 
