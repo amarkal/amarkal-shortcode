@@ -77,13 +77,18 @@ class Manager
     }
 
     /**
-     * Enqueue the popup stylesheet. This needs to be separated from the editor
-     * stylesheet since it is not part of the editor.
+     * Enqueue the necessary styles & scripts
      *
      * @return void
      */
-    public function enqueue_popup_style()
+    public function enqueue_scripts()
     {
+        \wp_enqueue_script('shortcode'); // Needed for wp.shortcode
+
+        /**
+         * Enqueue the popup stylesheet. This needs to be separated from the editor
+         * stylesheet since it is not part of the editor.
+         */
         \wp_enqueue_style('amarkal-shortcode',\Amarkal\Core\Utility::path_to_url(__DIR__.'/assets/css/dist/amarkal-shortcode-popup.min.css'));
     }
 
@@ -260,7 +265,7 @@ class Manager
     {
         \add_filter('mce_external_plugins',array($this,'enqueue_script'));
         \add_action('admin_init', array($this,'enqueue_editor_style'));
-        \add_action('admin_enqueue_scripts', array($this,'enqueue_popup_style'));
-        \add_action('wp_enqueue_scripts', array($this,'enqueue_popup_style'));
+        \add_action('admin_enqueue_scripts', array($this,'enqueue_scripts'));
+        \add_action('wp_enqueue_scripts', array($this,'enqueue_scripts'));
     }
 }
